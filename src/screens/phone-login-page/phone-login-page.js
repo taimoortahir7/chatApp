@@ -53,6 +53,13 @@ const Login = ({ navigation }) => {
             .confirm(verificationCode)
             .then(user => {
                 setUserID(user.uid);
+                firebase
+                .database()
+                .ref('users/' + user.uid).set({
+                    phoneNumber: phone
+                  })
+                  .then(result => console.log('result: ', result))
+                  .catch(err => console.log('err: ', err));
                 alert(`Verified! ${user.uid}`)
             })
             .catch(error => {
