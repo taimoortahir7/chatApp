@@ -9,7 +9,7 @@ import CountryPicker from 'react-native-country-picker-modal';
 
 const Login = ({ navigation }) => {
     // const phone = useRef();
-    const countryPicker = useRef();
+    // const countryPicker = useRef();
 
     const [cca2, setCCA2] = useState('US');
     const [pickerData, setPickerData] = useState();
@@ -58,8 +58,8 @@ const Login = ({ navigation }) => {
                 .ref('users/' + user.uid).set({
                     phoneNumber: phone
                   })
-                  .then(result => console.log('result: ', result))
-                  .catch(err => console.log('err: ', err));
+                .then(result => console.log('result: ', result))
+                .catch(err => console.log('err: ', err));
                 alert(`Verified! ${user.uid}`)
             })
             .catch(error => {
@@ -75,7 +75,7 @@ const Login = ({ navigation }) => {
         return (
             <View style={styles.verificationView}>
                 <TextInput
-                    style={styles.textInput}
+                    style={[styles.fieldStyling]}
                     placeholder='Verification code'
                     placeholderTextColor='#eee'
                     value={verificationCode}
@@ -116,26 +116,32 @@ const Login = ({ navigation }) => {
                     onPressFlag={onPressFlag}
                 /> */}
 
-                <CountryPicker
+                {/* <CountryPicker
                     ref={countryPicker}
                     onChange={(value)=> selectCountry(value)}
                     translation='eng'
                     cca2={cca2}
                 >
-                </CountryPicker>
-                
-                <TextInput
-                    style={styles.textInput}
-                    placeholder='Phone Number with country code'
-                    placeholderTextColor='#eee'
-                    keyboardType='phone-pad'
-                    value={phone}
-                    onChangeText={phone => {
-                        setPhone(phone);
-                    }}
-                    maxLength={15}
-                    editable={confirmResult ? false : true}
-                />
+                </CountryPicker> */}
+
+                <View style={{ marginTop: 30 }}>
+                    <View style={styles.fieldStyling}>
+                        <Text style={{ color: 'white' }}>Pakistan</Text>
+                    </View>
+                    
+                    <TextInput
+                        style={[styles.fieldStyling, {borderTopWidth: 0}]}
+                        placeholder='Phone Number ( +92xxxxxxxxxx )'
+                        placeholderTextColor='#eee'
+                        keyboardType='phone-pad'
+                        value={phone}
+                        onChangeText={phone => {
+                            setPhone(phone);
+                        }}
+                        maxLength={15}
+                        editable={confirmResult ? false : true}
+                    />
+                </View>
 
                 <TouchableOpacity
                     style={[styles.themeButton, { marginTop: 20 }]}
@@ -189,6 +195,14 @@ const styles = StyleSheet.create({
     nextLink: {
         color: 'white',
         // width: '50%'
+    },
+    fieldStyling: {
+        borderBottomWidth: 1,
+        borderTopWidth: 1,
+        width: 410, 
+        borderColor: '#555963',
+        paddingVertical: 10,
+        paddingHorizontal: 10
     }
 });
 
