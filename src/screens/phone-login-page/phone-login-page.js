@@ -156,7 +156,11 @@ const Login = ({ navigation }) => {
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', width: '97%' }}>
                 <Link to={'/OnBoarding'} style={[styles.loginLink, styles.cancelLink]}>Cancel</Link>
-                <Link to={'/Chat'} style={[styles.loginLink, styles.nextLink]}>Next</Link>
+                <TouchableOpacity onPress={() => navigation.navigate('Home', {
+                    userID: userId
+                })}>
+                    <Text style={[styles.loginLink, styles.nextLink]}>Next</Text>
+                </TouchableOpacity>
             </View>
         </View>
         

@@ -6,39 +6,18 @@ const ThreadItem = (props) => {
   return (
     <View style={styles.orderItem}>
       <View style={styles.category}>
-        {
+        {/* {
           (props.category === 'highest') && (
             <View style={ [styles.categoryBackground, styles.categoryRed] }>
               <Image source={require('./../../../assets/projectItem.png')}/>
             </View>
           )
-        }
-        {
-          (props.category === 'preferred') && (
-            <View style={ [styles.categoryBackground, styles.categoryOrange] }>
-              <Image source={require('./../../../assets/projectItem.png')}/>
-            </View>
-          )
-        }
-        {
-          (props.category === 'moderate') && (
-            <View style={ [styles.categoryBackground, styles.categoryBlue] }>
-              <Image source={require('./../../../assets/projectItem.png')}/>
-            </View>
-          )
-        }
-        {
-          (props.category === 'low') && (
-            <View style={ [styles.categoryBackground, styles.categoryGreen] }>
-              <Image source={require('./../../../assets/projectItem.png')}/>
-            </View>
-          )
-        }
+        } */}
       </View>
       <View style={styles.title}>
-      <Text style={{ paddingHorizontal: 10, paddingVertical: 5 }}>{props.title}</Text>
+        <Text style={{ paddingHorizontal: 10, paddingVertical: 5 }}>{props.title}</Text>
         <View style={styles.tasks}>
-          <Image source={require('./../../../assets/taskIcon.png')}/>
+          {/* <Image source={require('./../../../assets/taskIcon.png')}/> */}
           <Text style={{ paddingHorizontal: 5}}>{props.tasks} tasks</Text>
         </View>
       </View>

@@ -34,6 +34,7 @@ import { primaryColor } from './assets/colors';
 import Chat from './src/screens/chat-page/chat-page';
 import Login from './src/screens/phone-login-page/phone-login-page';
 import OnBoarding from './src/screens/onboarding-page/onboarding-page';
+import Home from './src/screens/home-page/home-page';
 // import AddView from './shared/add-view';
 
 // const rootReducer = combineReducers({
@@ -85,6 +86,7 @@ const App: () => React$Node = () => {
             }
           })}/>
           <Stack.Screen name='Chat' component={Chat}/>
+          <Stack.Screen name='Home' component={Home}/>
           {/* <Stack.Screen name='Signin' component={Signin}/>
           <Stack.Screen name='ForgotPassword' component={ForgotPassword}/>
           <Stack.Screen name='OnBoarding' component={OnBoarding}/>

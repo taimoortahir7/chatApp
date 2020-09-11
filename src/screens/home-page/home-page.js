@@ -3,20 +3,27 @@ import firebase from 'react-native-firebase';
 import { View, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, StyleSheet, Image, Text, TextInput } from "react-native";
 import ThreadItem from "../thread-item-page/thread-item-page";
 import SearchView from './../../shared/search-view/search-view';
+import { FAB } from 'react-native-paper';
+import {buttonColor, linkColor} from '../../../assets/colors';
 
-import {buttonColor, linkColor} from '../../assets/colors';
+const Home = ({ route, navigation }) => {
 
-const Home = ({ navigation }) => {
+  const { userID } = route.params;
+
   const [isLoading, setIsLoading] = useState(false);
   const [chats, setChats] = useState();
 
   const getChatThreads = () => {
+    setIsLoading(true);
     firebase
     .database()
     .ref('chats')
     .on('value', function(snapshot) {
         if (snapshot.val()) {
-            setChats(snapshot.val());
+          setIsLoading(false);
+          setChats(snapshot.val());
+        } else {
+          setIsLoading(false);
         }
     });
   };
@@ -45,24 +52,37 @@ const Home = ({ navigation }) => {
   return (
     <SafeAreaView style={ [styles.safeArea] }>
       <SearchView />
-      <FlatList
-        data={chats}
-        keyExtractor={(item) => item.id}
-        renderItem={(itemData) => {
-          console.log('itemData: ', itemData);
-          return <TouchableOpacity onPress={() => navigation.navigate('Tasks', {
-            projectID: itemData.item.id,
-            projectName: itemData.item.title,
-            addTask: addTask(itemData.item.id)
-          })}>
-            <ThreadItem
-              title={itemData.item.title}
-              category={itemData.item.category}
-              tasks={itemData.item.tasks}
+      <View style={styles.centered}>
+        {/* {
+          (chats) && (
+            <FlatList
+              data={chats}
+              keyExtractor={(item) => item.id}
+              renderItem={(itemData) => {
+                console.log('itemData: ', itemData);
+                return <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
+                  <ThreadItem
+                    name={itemData.item.}
+                    message={itemData.item.category}
+                    time={itemData.item.tasks}
+                  />
+                </TouchableOpacity>
+              }}
             />
-          </TouchableOpacity>
-        }}
-      />
+          )
+        } */}
+        <FAB
+          style={styles.fab}
+          small
+          icon="plus"
+          onPress={() => console.log('Pressed')}
+        />
+        {
+          (!chats) && (
+            <Image source={require('./../../../assets/chat.png')}/>
+          )
+        }
+      </View>
     </SafeAreaView>
   );
 };
@@ -93,6 +113,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 17,
     lineHeight: 22
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
   }
 });
 

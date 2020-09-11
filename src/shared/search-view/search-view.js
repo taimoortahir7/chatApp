@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Image, TextInput } from "react-native";
 
 
 const SearchView = (props) => {
@@ -7,17 +7,17 @@ const SearchView = (props) => {
   return (
     <View style={styles.addProject}>
         <View>
-        <View style={styles.search}>
-          <Image source={require('./../../../assets/search.png')}/>
-          <TextInput
-              style={ styles.textInput }
-              onChangeText={text => searchFilterFunction(text)}
-              placeholder='Search'
-              textContentType='name'
-              ref={r=>passwordTextInput=r}
-          />
+          <View style={styles.search}>
+            <Image source={require('./../../../assets/search.png')}/>
+            <TextInput
+                style={ styles.textInput }
+                onChangeText={text => searchFilterFunction(text)}
+                placeholder='Search'
+                textContentType='name'
+                ref={r=>passwordTextInput=r}
+            />
+          </View>
         </View>
-      </View>
         {/* <TouchableOpacity activeOpacity = { .5 } onPress={() => refRBSheet.current.open()}>
           <Image source={require('./../assets/plusBlue.png')}/>
         </TouchableOpacity> */}
