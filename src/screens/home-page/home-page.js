@@ -3,12 +3,31 @@ import firebase from 'react-native-firebase';
 import { View, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, StyleSheet, Image, Text, TextInput } from "react-native";
 import ThreadItem from "../thread-item-page/thread-item-page";
 import SearchView from './../../shared/search-view/search-view';
-import { FAB } from 'react-native-paper';
+import { FloatingAction } from "react-native-floating-action";
 import {buttonColor, linkColor} from '../../../assets/colors';
 
 const Home = ({ route, navigation }) => {
 
   const { userID } = route.params;
+
+  const floatingAction = useRef();
+
+  // floatingAction.current.animateButton();
+
+  const actions = [
+    {
+      text: "Accessibility",
+      // icon: require("./images/ic_accessibility_white.png"),
+      name: "bt_accessibility",
+      position: 2
+    },
+    {
+      text: "Language",
+      // icon: require("./images/ic_language_white.png"),
+      name: "bt_language",
+      position: 1
+    }
+  ];
 
   const [isLoading, setIsLoading] = useState(false);
   const [chats, setChats] = useState();
@@ -71,11 +90,12 @@ const Home = ({ route, navigation }) => {
             />
           )
         } */}
-        <FAB
-          style={styles.fab}
-          small
-          icon="plus"
-          onPress={() => console.log('Pressed')}
+        <FloatingAction
+          ref={floatingAction}
+          actions={actions}
+          onPressItem={name => {
+            console.log(`selected button: ${name}`);
+          }}
         />
         {
           (!chats) && (
