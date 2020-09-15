@@ -8,6 +8,7 @@
 
 import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
+import { Image, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 // import { Provider as PaperProvider } from 'react-native-paper';
@@ -35,6 +36,7 @@ import Chat from './src/screens/chat-page/chat-page';
 import Login from './src/screens/phone-login-page/phone-login-page';
 import OnBoarding from './src/screens/onboarding-page/onboarding-page';
 import Home from './src/screens/home-page/home-page';
+import Contacts from './src/screens/contacts-page/contacts-page';
 // import AddView from './shared/add-view';
 
 // const rootReducer = combineReducers({
@@ -87,6 +89,25 @@ const App: () => React$Node = () => {
           })}/>
           <Stack.Screen name='Chat' component={Chat}/>
           <Stack.Screen name='Home' component={Home}/>
+          <Stack.Screen name='Contacts' component={Contacts}
+          options={({ navigation }) => ({
+            headerTitle: 'Start New Chat',
+            headerShown: true,
+            headerLeft: () => (
+              <TouchableOpacity style={{ paddingVertical: 10, paddingHorizontal: 30 }} onPress={ () => { navigation.goBack() } }>
+                <Image source={require('./assets/cross.png')} />   
+              </TouchableOpacity>
+            ),
+            headerStyle: {
+              backgroundColor: primaryColor
+            },
+            headerTitleStyle: {
+              color: 'white',
+              fontWeight: 'normal',
+              fontSize: 20,
+              lineHeight: 23
+            }
+          })}/>
           {/* <Stack.Screen name='Signin' component={Signin}/>
           <Stack.Screen name='ForgotPassword' component={ForgotPassword}/>
           <Stack.Screen name='OnBoarding' component={OnBoarding}/>

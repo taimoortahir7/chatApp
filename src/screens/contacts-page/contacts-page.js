@@ -1,46 +1,34 @@
 import React, { useEffect, useState, useRef } from "react";
 import firebase from 'react-native-firebase';
 import { View, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, StyleSheet, Image, Text, TextInput } from "react-native";
-import ThreadItem from "../thread-item-page/thread-item-page";
+import ContactsItem from "../contacts-item-page/contacts-item-page";
 import SearchView from './../../shared/search-view/search-view';
-import { FloatingAction } from "react-native-floating-action";
-import {buttonColor, linkColor} from '../../../assets/colors';
+import {buttonColor, linkColor, primaryColor} from '../../../assets/colors';
 
-const Home = ({ route, navigation }) => {
+const Contacts = ({ route, navigation }) => {
 
   const { userID } = route.params;
 
-  const floatingAction = useRef();
-
-  // floatingAction.current.animateButton();
-
-  // const actions = [
-  //   {
-  //     text: "Accessibility",
-  //     // icon: require("./images/ic_accessibility_white.png"),
-  //     name: "bt_accessibility",
-  //     position: 2
-  //   },
-  //   {
-  //     text: "Language",
-  //     // icon: require("./images/ic_language_white.png"),
-  //     name: "bt_language",
-  //     position: 1
-  //   }
-  // ];
-
   const [isLoading, setIsLoading] = useState(false);
-  const [chats, setChats] = useState();
+  const [contacts, setContacts] = useState(null);
 
-  const getChatThreads = () => {
+  const getContacts = () => {
     setIsLoading(true);
     firebase
     .database()
-    .ref('chats')
+    .ref('users')
     .on('value', function(snapshot) {
         if (snapshot.val()) {
+          let array = [];
+
           setIsLoading(false);
-          setChats(snapshot.val());
+          snapshot.forEach(function(snap) {
+            var item = snap.val();
+            item.key = snap.key;
+
+            array.push(item);
+            setContacts(array);
+          });
         } else {
           setIsLoading(false);
         }
@@ -48,7 +36,8 @@ const Home = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    getChatThreads();
+    getContacts();
+    console.log('contacts: ', contacts);
   }, []);
 
   if (isLoading) {
@@ -70,43 +59,32 @@ const Home = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={ [styles.safeArea] }>
-      <SearchView />
+      {/* <SearchView /> */}
       <View style={styles.centered}>
-        {/* {
-          (chats) && (
+        {
+          (contacts) && (
             <FlatList
-              data={chats}
-              keyExtractor={(item) => item.id}
+              data={contacts}
+              keyExtractor={(item) => item.key}
               renderItem={(itemData) => {
                 console.log('itemData: ', itemData);
-                return <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
-                  <ThreadItem
-                    name={itemData.item.}
-                    message={itemData.item.category}
-                    time={itemData.item.tasks}
+                return <TouchableOpacity onPress={() => navigation.navigate('Chat', {
+                  userID: userID,
+                  contactID: itemData.item?.key
+                })}>
+                  <ContactsItem
+                    name={itemData.item?.name}
+                    phone={itemData.item?.phoneNumber}
+                    about={itemData.item?.about}
+                    contactID={itemData.item?.key}
                   />
                 </TouchableOpacity>
               }}
             />
           )
-        } */}
-        <FloatingAction
-          ref={floatingAction}
-          // actions={actions}
-          showBackground={false}
-          floatingIcon={require('./../../../assets/message.png')}
-          iconHeight={20}
-          iconWidth={20}
-          color="#837DFF"
-          onPressMain={name => {
-            console.log(`FAB clicked: ${name}`);
-            navigation.navigate('Contacts', {
-              userID: userID
-            });
-          }}
-        />
+        }
         {
-          (!chats) && (
+          (!contacts) && (
             <Image source={require('./../../../assets/chat.png')}/>
           )
         }
@@ -118,11 +96,13 @@ const Home = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   centered: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
+    // width: '100%'
   },
   safeArea: {
-    flex: 1
+    flex: 1,
+    backgroundColor: primaryColor
   },
   addProject: {
     alignItems: 'flex-end',
@@ -150,4 +130,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Home;
+export default Contacts;
