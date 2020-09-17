@@ -99,8 +99,9 @@ const Login = ({ navigation }) => {
     // }
      
     const selectCountry = (country) => {
-        phone.current.selectCountry(country.cca2.toLowerCase());
-        setCCA2(country.cca2);
+        console.log('country: ', country);
+        // phone.current.selectCountry(country.cca2.toLowerCase());
+        // setCCA2(country.cca2);
     }
 
   return (
@@ -116,13 +117,14 @@ const Login = ({ navigation }) => {
                     onPressFlag={onPressFlag}
                 /> */}
 
-                {/* <CountryPicker
-                    ref={countryPicker}
-                    onChange={(value)=> selectCountry(value)}
+                <CountryPicker
+                    withFlag={true}
+                    withCallingCode={true}
+                    onSelect={(value) => selectCountry(value)}
                     translation='eng'
                     cca2={cca2}
                 >
-                </CountryPicker> */}
+                </CountryPicker>
 
                 <View style={{ marginTop: 30 }}>
                     <View style={styles.fieldStyling}>

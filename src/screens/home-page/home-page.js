@@ -4,7 +4,7 @@ import { View, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, Styl
 import ThreadItem from "../thread-item-page/thread-item-page";
 import SearchView from './../../shared/search-view/search-view';
 import { FloatingAction } from "react-native-floating-action";
-import {buttonColor, linkColor} from '../../../assets/colors';
+import {buttonColor, linkColor, primaryColor} from '../../../assets/colors';
 
 const Home = ({ route, navigation }) => {
 
@@ -30,20 +30,35 @@ const Home = ({ route, navigation }) => {
   // ];
 
   const [isLoading, setIsLoading] = useState(false);
-  const [chats, setChats] = useState();
+  const [contactID, setContactID] = useState(''); 
+  const [chats, setChats] = useState(null);
 
   const getChatThreads = () => {
     setIsLoading(true);
-    firebase
-    .database()
-    .ref('chats')
-    .on('value', function(snapshot) {
-        if (snapshot.val()) {
-          setIsLoading(false);
-          setChats(snapshot.val());
-        } else {
-          setIsLoading(false);
-        }
+    firebase.database().ref('chats').on('value', function(snapshot) {
+      if(snapshot.val()) {
+        setIsLoading(false);
+        snapshot.forEach(async function(snap) {
+
+          if (snap.key.includes(userID)) {
+            console.log('userID exsists ! ');
+            let str = snap.key.split(userID);
+            firebase.database().ref(`users/${str[1]}`).once('value', function(userSnapshot) {
+              if(userSnapshot.val()) {
+                let array = [];
+                var contactUser = userSnapshot.val();
+                contactUser.key = userSnapshot.key;
+                array.push(contactUser);
+                setChats(array);
+                console.log('chats: ', chats);
+              }
+            });
+            setContactID(str[1]);
+          }
+        });
+      } else {
+        setIsLoading(false);
+      }
     });
   };
 
@@ -72,24 +87,28 @@ const Home = ({ route, navigation }) => {
     <SafeAreaView style={ [styles.safeArea] }>
       <SearchView />
       <View style={styles.centered}>
-        {/* {
+        {
           (chats) && (
             <FlatList
               data={chats}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.key}
               renderItem={(itemData) => {
                 console.log('itemData: ', itemData);
-                return <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
+                return <TouchableOpacity onPress={() => navigation.navigate('Chat', {
+                  userID: userID,
+                  contactID: itemData.item?.key,
+                  name: itemData.item?.name,
+                  phone: itemData.item?.phoneNumber
+                })}>
                   <ThreadItem
-                    name={itemData.item.}
-                    message={itemData.item.category}
-                    time={itemData.item.tasks}
+                    name={itemData.item?.name}
+                    phone={itemData.item?.phoneNumber}
                   />
                 </TouchableOpacity>
               }}
             />
           )
-        } */}
+        }
         <FloatingAction
           ref={floatingAction}
           // actions={actions}
@@ -119,10 +138,11 @@ const styles = StyleSheet.create({
   centered: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    // alignItems: 'center'
   },
   safeArea: {
-    flex: 1
+    flex: 1,
+    backgroundColor: primaryColor
   },
   addProject: {
     alignItems: 'flex-end',

@@ -1,41 +1,69 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
-import firebaseSDK from '../../../config/firebase-config';
+import firebase from 'react-native-firebase';
 
-class Chat extends React.Component {
+const Chat = ({ route }) => {
   
-  state = {
-    messages: []
+  const { userID, contactID, name, phone } = route.params;
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    getMessages();
+  }, []);
+
+  const onSend = (message) => {
+    setMessages(GiftedChat.append(messages, message));
+    console.log('message: ', message);
+    // createChatThread(message);
+  }
+
+  const getMessages = () => {
+    firebase.database().ref(`chats/${userID}${contactID}`).on('value', function(snapshot) {
+      if(snapshot.val()) {
+        let array = [];
+
+        snapshot.forEach(function(snap) {
+          var item = snap.val();
+          item.key = snap.key;
+
+          array.push(item);
+        });
+        setMessages(array);
+      }
+    });
   };
 
-  get user() {
-    return {
-      id: firebaseSDK.uid,
-      _id: firebaseSDK.uid
+  const createChatThread = (message) => {
+    const messageID = message[0]?._id;
+    const postData = {
+      text: message[0]?.text,
+      receiverID: contactID,
+      senderID: userID,
+      timestamp: message[0]?.createdAt
     };
+    firebase.database().ref(`chats/${userID}${contactID}/${messageID}`).set(postData).then(function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('chat sent successfully!');
+      }
+    });
   }
   
-  render() {
-    return <GiftedChat 
-      messages={this.state.messages}
-      onSend={message =>
-        this.setState(previousState => ({
-          messages: GiftedChat.append(previousState.messages, message)
-        }))}
-      user={this.user}
-    />;
-  }
-
-  componentDidMount() {
-    // firebaseSDK.refOn(message =>
-    //   this.setState(previousState => ({
-    //     messages: GiftedChat.append(previousState.messages, message)
-    //   }))
-    // );
-  }
-  componentWillUnmount() {
-    // firebaseSDK.refOff();
-  }
+  return (
+    <GiftedChat 
+      messages={messages}
+      isTyping={true}
+      placeholder="Write"
+      onSend={message => onSend(message)}
+      user={{
+        _id: userID,
+        name: name,
+        phone: phone
+      }}
+    />
+  )
+  
 };
 
 export default Chat;

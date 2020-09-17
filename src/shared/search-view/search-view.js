@@ -27,7 +27,7 @@ const SearchView = (props) => {
 
 const styles = StyleSheet.create({
   addProject: {
-    alignItems: 'flex-end',
+    // alignItems: 'flex-end',
     paddingVertical: 10,
     paddingHorizontal: 15,
   },

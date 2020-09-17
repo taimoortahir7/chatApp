@@ -1,26 +1,26 @@
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import { redColor, orangeColor, blueColor, greenColor } from '../../../assets/colors';
+import { redColor, orangeColor, blueColor, greenColor, primaryColor } from '../../../assets/colors';
 
 const ThreadItem = (props) => {
   return (
     <View style={styles.orderItem}>
-      <View style={styles.category}>
-        {/* {
-          (props.category === 'highest') && (
-            <View style={ [styles.categoryBackground, styles.categoryRed] }>
-              <Image source={require('./../../../assets/projectItem.png')}/>
-            </View>
-          )
-        } */}
-      </View>
-      <View style={styles.title}>
-        <Text style={{ paddingHorizontal: 10, paddingVertical: 5 }}>{props.title}</Text>
-        <View style={styles.tasks}>
-          {/* <Image source={require('./../../../assets/taskIcon.png')}/> */}
-          <Text style={{ paddingHorizontal: 5}}>{props.tasks} tasks</Text>
+        <View style={ styles.categoryBackground }>
+            <Image source={require('./../../../assets/user.png')}/>
         </View>
-      </View>
+        <View style={styles.title}>
+            {
+                (props?.name) && (
+                    <Text style={styles.titleHeading}>{props?.name}</Text>
+                )
+            }
+            {
+                (props?.phone) && (
+                    <Text style={styles.titleHeading}>{props?.phone}</Text>
+                )
+            }
+            <Text style={{ paddingHorizontal: 10, paddingVertical: 5, color: 'white' }}>{props?.about}</Text>
+        </View>
     </View>
   );
 };
@@ -29,9 +29,9 @@ const styles = StyleSheet.create({
   orderItem: {
     display: 'flex',
     flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: '#E4E4E4',
-    backgroundColor: "white",
+    // borderBottomWidth: 1,
+    // borderColor: '#E4E4E4',
+    backgroundColor: primaryColor,
     padding: 20,
     alignItems: "center",
   },
@@ -48,18 +48,6 @@ const styles = StyleSheet.create({
     elevation: 5,
     // shadow: '0px 4px 4px rgba(50, 50, 71, 0.08), 0px 4px 8px rgba(50, 50, 71, 0.06)'
   },
-  categoryRed: {
-    backgroundColor: redColor
-  },
-  categoryOrange: {
-    backgroundColor: orangeColor
-  },
-  categoryBlue: {
-    backgroundColor: blueColor
-  },
-  categoryGreen: {
-    backgroundColor: greenColor
-  },
   title: {
     display: 'flex',
     // alignItems: 'center'
@@ -70,6 +58,14 @@ const styles = StyleSheet.create({
     // paddingVertical: 5,
     paddingHorizontal: 8,
     alignItems: 'center'
+  },
+  titleHeading: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    color: 'white',
+    fontWeight: 'normal',
+    fontSize: 15,
+    lineHeight: 18
   }
 });
 

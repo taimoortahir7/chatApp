@@ -27,8 +27,9 @@ const Contacts = ({ route, navigation }) => {
             item.key = snap.key;
 
             array.push(item);
-            setContacts(array);
+            array = array.filter(item => item.key !== userID);
           });
+          setContacts(array);
         } else {
           setIsLoading(false);
         }
@@ -37,7 +38,6 @@ const Contacts = ({ route, navigation }) => {
 
   useEffect(() => {
     getContacts();
-    console.log('contacts: ', contacts);
   }, []);
 
   if (isLoading) {
@@ -70,7 +70,9 @@ const Contacts = ({ route, navigation }) => {
                 console.log('itemData: ', itemData);
                 return <TouchableOpacity onPress={() => navigation.navigate('Chat', {
                   userID: userID,
-                  contactID: itemData.item?.key
+                  contactID: itemData.item?.key,
+                  name: itemData.item?.name,
+                  phone: itemData.item?.phoneNumber
                 })}>
                   <ContactsItem
                     name={itemData.item?.name}

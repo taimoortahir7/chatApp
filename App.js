@@ -8,7 +8,7 @@
 
 import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity , Text} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 // import { Provider as PaperProvider } from 'react-native-paper';
@@ -87,7 +87,26 @@ const App: () => React$Node = () => {
               lineHeight: 23
             }
           })}/>
-          <Stack.Screen name='Chat' component={Chat}/>
+          <Stack.Screen name='Chat' component={Chat}
+          options={({ route, navigation }) => ({
+            headerTitle: () => (
+              <TouchableOpacity style={{ paddingVertical: 10, paddingHorizontal: 30, display: 'flex', flexDirection: 'row' }} onPress={ () => { navigation.goBack() } }>
+                <Image source={require('./assets/cross.png')} style={{ marginHorizontal: 20 }}/> 
+                <Text style={{ color: 'white', fontWeight: 'normal', fontSize: 20, lineHeight: 23 }}>{route?.params?.name ? route?.params?.name : route?.params?.phone}</Text>
+              </TouchableOpacity>
+            ),
+            headerBackTitle: '',
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: primaryColor
+            },
+            headerTitleStyle: {
+              color: 'white',
+              fontWeight: 'normal',
+              fontSize: 20,
+              lineHeight: 23
+            }
+          })}/>
           <Stack.Screen name='Home' component={Home}/>
           <Stack.Screen name='Contacts' component={Contacts}
           options={({ navigation }) => ({
