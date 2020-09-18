@@ -43,6 +43,9 @@ const Home = ({ route, navigation }) => {
           if (snap.key.includes(userID)) {
             console.log('userID exsists ! ');
             let str = snap.key.split(userID);
+
+            // take ID from chat threadID that is other than user ID
+
             firebase.database().ref(`users/${str[1]}`).once('value', function(userSnapshot) {
               if(userSnapshot.val()) {
                 let array = [];

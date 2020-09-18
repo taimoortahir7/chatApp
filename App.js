@@ -34,6 +34,7 @@ import { primaryColor } from './assets/colors';
 // import Tasks from './screens/tasks-page/tasks-page';
 import Chat from './src/screens/chat-page/chat-page';
 import Login from './src/screens/phone-login-page/phone-login-page';
+import PhoneCode from './src/screens/phone-code-page/phone-code-page';
 import OnBoarding from './src/screens/onboarding-page/onboarding-page';
 import Home from './src/screens/home-page/home-page';
 import Contacts from './src/screens/contacts-page/contacts-page';
@@ -75,6 +76,21 @@ const App: () => React$Node = () => {
           <Stack.Screen name='Login' component={Login} 
           options={() => ({
             headerTitle: 'Phone Number',
+            headerShown: true,
+            headerLeft: null,
+            headerStyle: {
+              backgroundColor: primaryColor
+            },
+            headerTitleStyle: {
+              color: 'white',
+              fontWeight: 'normal',
+              fontSize: 20,
+              lineHeight: 23
+            }
+          })}/>
+          <Stack.Screen name='PhoneCode' component={PhoneCode} 
+          options={() => ({
+            headerTitle: 'Security Code',
             headerShown: true,
             headerLeft: null,
             headerStyle: {
