@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
 import firebase from 'react-native-firebase';
 import { View, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, StyleSheet, Image, Text, TextInput } from "react-native";
 import ThreadItem from "../thread-item-page/thread-item-page";
@@ -8,7 +9,11 @@ import {buttonColor, linkColor, primaryColor} from '../../../assets/colors';
 
 const Home = ({ route, navigation }) => {
 
-  const { userID } = route.params;
+  // const { userID } = route.params;
+
+  const userID = useSelector((state) => state.auth.userId);
+
+  console.log('userID: ', userID);
 
   const floatingAction = useRef();
 
@@ -41,12 +46,14 @@ const Home = ({ route, navigation }) => {
         snapshot.forEach(async function(snap) {
 
           if (snap.key.includes(userID)) {
-            console.log('userID exsists ! ');
             let str = snap.key.split(userID);
 
-            // take ID from chat threadID that is other than user ID
+            // take userID of user other than loggedIn user to get threads
+            let user_id = (str[0] === "") ? str[1] : str[0];
 
-            firebase.database().ref(`users/${str[1]}`).once('value', function(userSnapshot) {
+            console.log('user_id: ', user_id);
+
+            firebase.database().ref(`users/${user_id}`).once('value', function(userSnapshot) {
               if(userSnapshot.val()) {
                 let array = [];
                 var contactUser = userSnapshot.val();
@@ -56,7 +63,7 @@ const Home = ({ route, navigation }) => {
                 console.log('chats: ', chats);
               }
             });
-            setContactID(str[1]);
+            setContactID(user_id);
           }
         });
       } else {

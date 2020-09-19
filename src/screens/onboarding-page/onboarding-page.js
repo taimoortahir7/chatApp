@@ -1,23 +1,41 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, SafeAreaView } from 'react-native';
+import { useSelector } from "react-redux";
+import { View, Text, Image, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Link } from '@react-navigation/native';
 import { primaryColor } from '../../../assets/colors';
 import logoImage from './../../../assets/onboarding.png';
 
 const OnBoarding = ({ navigation }) => {    
 
-  return (
-    <SafeAreaView style={ styles.mainContainer }>
-        <View style={{ alignItems: 'center' }}>
-            <Image source={logoImage} style={styles.logoImage}/>
-            <Text style={ styles.welcomeHeading }>Welcome to Chatina</Text>
-            <Text style={ styles.welcomeText }>Read our Privacy Policy. Tap “Agree & Continue” to accept the Terms of Service.</Text>
-        </View>
+    const userID = useSelector((state) => state.auth.userId);
 
-        <Link to='/Login' style={styles.loginLink}>Agree & Continue</Link>
-        
-    </SafeAreaView>
-  );
+    console.log('userID: ', userID);
+
+    return (
+        <SafeAreaView style={ styles.mainContainer }>
+            <View style={{ alignItems: 'center' }}>
+                <Image source={logoImage} style={styles.logoImage}/>
+                <Text style={ styles.welcomeHeading }>Welcome to Chatina</Text>
+                <Text style={ styles.welcomeText }>Read our Privacy Policy. Tap “Agree & Continue” to accept the Terms of Service.</Text>
+            </View>
+
+            {
+                (userID) && (
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+                        <Text style={styles.loginLink}>Agree & Continue</Text>
+                    </TouchableOpacity>
+                )
+            }
+            {
+                (!userID) && (
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+                        <Text style={styles.loginLink}>Agree & Continue</Text>
+                    </TouchableOpacity>
+                )
+            }
+            
+        </SafeAreaView>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -58,6 +76,14 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 21,
         color: 'white'
+    },
+    button: {
+        width: 222,
+        height: 40,
+        // backgroundColor: 'red',
+        textAlign: 'center',
+        alignItems: 'center',
+        paddingVertical: 8
     }
 });
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from "react-redux";
 import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 import { Link } from '@react-navigation/native';
 import firebase from 'react-native-firebase';
@@ -8,6 +9,7 @@ import {
     useBlurOnFulfill,
     useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
+import * as authActions from "../../store/actions/auth";
 import { primaryColor, borderColor } from '../../../assets/colors';
 
 const CELL_COUNT = 6;
@@ -15,6 +17,8 @@ const CELL_COUNT = 6;
 const PhoneCode = ({ route, navigation }) => {
 
     const {confirmResult, phone} = route.params;
+
+    const dispatch = useDispatch();
 
     const [value, setValue] = useState('');
     const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -39,9 +43,11 @@ const PhoneCode = ({ route, navigation }) => {
                 .ref('users/' + user.uid).set({
                     phoneNumber: phone
                   })
-                .then(result => navigation.navigate('Home', {
-                    userID: user.uid
-                }))
+                .then(result => {
+                    dispatch(authActions.login(user.uid)).then(() => {
+                        navigation.navigate('Home')
+                    });
+                })
                 .catch(err => console.log('err: ', err));
                 alert(`Verified! ${user.uid}`)
             })
