@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     // alignItems: 'flex-end',
     paddingVertical: 10,
     paddingHorizontal: 15,
+    width: '85%'
   },
   search: {
     display: 'flex',

@@ -26,6 +26,7 @@ import PhoneCode from './src/screens/phone-code-page/phone-code-page';
 import OnBoarding from './src/screens/onboarding-page/onboarding-page';
 import Home from './src/screens/home-page/home-page';
 import Contacts from './src/screens/contacts-page/contacts-page';
+import Account from './src/screens/account-page/account-page';
 
 const rootReducer = combineReducers({
   auth: authReducer
@@ -112,6 +113,25 @@ const App: () => React$Node = () => {
           <Stack.Screen name='Contacts' component={Contacts}
           options={({ navigation }) => ({
             headerTitle: 'Start New Chat',
+            headerShown: true,
+            headerLeft: () => (
+              <TouchableOpacity style={{ paddingVertical: 10, paddingHorizontal: 30 }} onPress={ () => { navigation.goBack() } }>
+                <Image source={require('./assets/cross.png')} />   
+              </TouchableOpacity>
+            ),
+            headerStyle: {
+              backgroundColor: primaryColor
+            },
+            headerTitleStyle: {
+              color: 'white',
+              fontWeight: 'normal',
+              fontSize: 20,
+              lineHeight: 23
+            }
+          })}/>
+          <Stack.Screen name='Account' component={Account}
+          options={({ navigation }) => ({
+            headerTitle: 'Account',
             headerShown: true,
             headerLeft: () => (
               <TouchableOpacity style={{ paddingVertical: 10, paddingHorizontal: 30 }} onPress={ () => { navigation.goBack() } }>

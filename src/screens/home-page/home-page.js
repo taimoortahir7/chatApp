@@ -95,7 +95,12 @@ const Home = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={ [styles.safeArea] }>
-      <SearchView />
+      <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+        <SearchView />
+        <TouchableOpacity onPress={() => navigation.navigate('Account')}>
+          <Image source={require('./../../../assets/user.png')}/>
+        </TouchableOpacity>
+      </View>
       <View style={styles.centered}>
         {
           (chats) && (
